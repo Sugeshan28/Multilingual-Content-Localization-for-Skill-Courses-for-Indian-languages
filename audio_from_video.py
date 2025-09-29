@@ -3,7 +3,7 @@ import ffmpeg
 
 class AudioFromVideo:
     """Extracting audio from the video file"""
-    def __init__(self,video:str,out_path:str):
+    def __init__(self,video,out_path):
         self.video = video
         self.output = out_path
 
