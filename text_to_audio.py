@@ -1,58 +1,29 @@
-import torch
-import soundfile as sf
-from parler_tts import ParlerTTSForConditionalGeneration
-from transformers import AutoTokenizer
 
+from elevenlabs.client import ElevenLabs
+from elevenlabs.play import play
+import os
+from elevenlabs.client import ElevenLabs
+from elevenlabs import save
 
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-print(f"Using device: {device}")
+class TextToAudio:
 
-local_model_path = r"D:\Hugging_face_models\models--ai4bharat--indic-parler-tts\snapshots\7b527af5ee8ed1f9a28d80b19703ed9bb8ba10ca" # <--- MAKE SURE THIS PATH IS CORRECT
-print(f"Loading model and tokenizer from local path: {local_model_path}...")
+    def __init__(self,text_path):
+        self.api_key="sk_3d8e9b0adef6a4d51941831e0068caa10fcb67ee691fe38a"
+        self.text = text_path
+    def text_to_audio(self):
+            
+        elevenlabs = ElevenLabs(api_key=self.api_key)
+        with open(self.text,'r',encoding='utf-8') as re:
+            text_t = re.read()
 
-try:
-    model = ParlerTTSForConditionalGeneration.from_pretrained(local_model_path).to(device)
-    tokenizer = AutoTokenizer.from_pretrained(local_model_path)
-    print("Model and tokenizer loaded successfully.")
-except Exception as e:
-    print(f"Error loading model from local path: {e}")
-    exit()
+        audio = elevenlabs.text_to_speech.convert(
+            text=text_t,
+            voice_id="JBFqnCBsd6RMkjVDRZzb",
+            model_id="eleven_multilingual_v2",
+            output_format="mp3_44100_128",
+        )
 
-with open('db/multmedia/text/nextext.txt') as op:
-    result = op.read()
+        save(audio,'output_te.mp3')
 
-tamil_text = result
-description = "A male speaker reciting a sentence in Tamil with clear natural looking voice."
-
-print("Preparing input text...")
-
-
-tokenized_description = tokenizer(description, return_tensors="pt").to(device) 
-
-prompt_input_ids = tokenizer(tamil_text, return_tensors="pt").input_ids.to(device)
-
-
-print("Generating audio... (This may take a moment)")
-try:
-
-    generation = model.generate(
-        **tokenized_description,
-        prompt_input_ids=prompt_input_ids,
-        do_sample=False,
-        temperature=0.6,
-        top_k=5,
-        repetition_penalty=1.2
-    ).to(torch.float32)
-
-    audio_arr = generation.cpu().numpy().squeeze()
-
-    # 5. Save the Audio
-    sf.write(
-        "tamil_output_final.wav",
-        audio_arr,
-        model.config.sampling_rate
-    )
-    print("Audio generation complete! Saved as tamil_output_final.wav")
-
-except Exception as e:
-    print(f"An error occurred during audio generation: {e}")
+tts = TextToAudio(text_path="db/multmedia/text/new.txt")
+tts.text_to_audio()

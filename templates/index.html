@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Content Localization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="app-container">
+        <h1>Video Content Localization</h1>
+        <form id="localization-form">
+            <div class="form-group">
+                <label for="video-upload">1. Upload Video File</label>
+                <input type="file" id="video-upload" name="video-upload" accept="video/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="source-language">2. Select Original Language</label>
+                <select id="source-language" name="source-language" required>
+                    <option value="" disabled selected>Choose a language...</option>
+                    <option value="english">English</option>
+                    <option value="hindi">Hindi</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="target-languages">3. Choose Target Language(s) <small>(Hold Ctrl/Cmd to select multiple)</small></label>
+                <select id="target-languages" name="target-languages" multiple required size="8">
+                    <option value="Assamese">Assamese</option>
+                    <option value="Bengali">Bengali</option>
+                    <option value="Bodo">Bodo</option>
+                    <option value="Dogri">Dogri</option>
+                    <option value="Gujarati">Gujarati</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Kannada">Kannada</option>
+                    <option value="Kashmiri">Kashmiri</option>
+                    <option value="Konkani">Konkani</option>
+                    <option value="Maithili">Maithili</option>
+                    <option value="Malayalam">Malayalam</option>
+                    <option value="Manipuri">Manipuri</option>
+                    <option value="Marathi">Marathi</option>
+                    <option value="Nepali">Nepali</option>
+                    <option value="Odia">Odia</option>
+                    <option value="Punjabi">Punjabi</option>
+                    <option value="Sanskrit">Sanskrit</option>
+                    <option value="Santali">Santali</option>
+                    <option value="Sindhi">Sindhi</option>
+                    <option value="Tamil">Tamil</option>
+                    <option value="Telugu">Telugu</option>
+                    <option value="Urdu">Urdu</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">Translate & Store Video</button>
+            
+            <p id="status-message"></p>
+        </form>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
